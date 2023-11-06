@@ -9,7 +9,7 @@
       <!-- Display errors section -->
       <!-- use v-show to show this if there are validation errors -->
       <div class="alert alert-danger" v-show="errors.length > 0">
-        <!-- show a list of validation errors from form -->
+        <!-- show a list of validation errors from the form -->
         <li v-for="error in errors">{{ error }}</li>
       </div>
 
@@ -91,12 +91,6 @@
           <!--Display text -->
           {{ media.traditional }}
         </label>
-
-        <!--
-          alternate way to write the above code
-          <input id="media1" class="form-check-input" type="radio" value="Traditional" v-model="medium">
-          <label class="form-check-label" for="media1">Traditional</label>
-        -->
       </div>
 
       <!-- "Digital" radio buttons -->
@@ -164,9 +158,8 @@
 
     <div class="card-body">
       <h3>
-        <!-- Display number of records -->
+        <!-- Display number of records: with computed property -->
         {{ totalRecords }}
-        <!-- with computed property -->
         <!-- {{ activityRecords.length }} records without computed property -->
       </h3>
 
@@ -282,7 +275,6 @@ export default {
     },
     totalHoursForEachActivityRecord() {
       let arrayOfObjects = []; // empty array for objects
-      // empty object for each type and hours for the type ("object literal" syntax)
       let objectInArray = {};
 
       this.activityRecords.forEach((record) => {
@@ -332,36 +324,6 @@ export default {
       }); // end of activityRecords array forEach
 
       return arrayOfObjects;
-
-      // alternate way of writing the above code limited to types in the array
-      // not flexible if types array increases or decreases
-      // let totalSketchingHours = 0;
-      // let totalDrawingHours = 0;
-      // let totalPaintingHours = 0;
-
-      // let eachActivityAndHours = []; // array of strings
-
-      // this.activityRecords.forEach((record) => {
-      //   if (record.type == "Sketching") {
-      //     totalSketchingHours = totalSketchingHours + record.hours;
-      //   } else if (record.type == "Drawing") {
-      //     totalDrawingHours = totalDrawingHours + record.hours;
-      //   } else if (record.type == "Painting") {
-      //     totalPaintingHours = totalPaintingHours + record.hours;
-      //   }
-      // });
-
-      // eachActivityAndHours.push(
-      //   `Sketching practice hours: ${totalSketchingHours}`
-      // );
-      // eachActivityAndHours.push(
-      //   `Drawing practice hours: ${totalDrawingHours}`
-      // );
-      // eachActivityAndHours.push(
-      //   `Painting practice hours: ${totalPaintingHours}`
-      // );
-
-      // return eachActivityAndHours;
     },
   },
   methods: {
