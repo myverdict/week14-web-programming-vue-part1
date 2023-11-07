@@ -8,7 +8,16 @@ Activity tracker app with Vue3
 
 <ul>
   <li>
-    Part 1: Activity tracker app (Vue 3) - Contd. from <a href="https://github.com/myverdict/week10-web-programming-vue">Week 10</a>
+    Activity tracker app (Vue 3)
+    <ul>
+      <li>
+        Part 1: No components - Contd. from <a href="https://github.com/myverdict/week10-web-programming-vue">Week 10</a>
+      </li>
+      <li>
+        Part 2: App with components
+      </li>
+    </ul>
+
   </li>
 
   <br>
