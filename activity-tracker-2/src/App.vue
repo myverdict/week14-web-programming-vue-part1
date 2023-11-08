@@ -8,53 +8,13 @@
     v-bind:media="media"
   />
 
-  <!-- Activity Records list section -->
-  <div class="card">
-    <h2 class="card-header">Activity Records</h2>
-
-    <div class="card-body">
-      <h3>
-        <!-- Display number of records: with computed property -->
-        {{ totalRecords }}
-        <!-- {{ activityRecords.length }} records without computed property -->
-      </h3>
-
-      <div id="records">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>How many hours?</th>
-              <th>Type</th>
-              <th>Media</th>
-              <th>Completed</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-
-          <!-- use v-for to create one table row for each activity record -->
-          <tbody>
-            <tr
-              v-for="record in activityRecords"
-              v-bind:class="{
-                sketchingRow: record.type === 'Sketching',
-                drawingRow: record.type === 'Drawing',
-                paintingRow: record.type === 'Painting',
-              }"
-            >
-              <td>{{ formatDate(record.date) }}</td>
-              <td>{{ record.hours.toFixed(2) }}</td>
-              <td>{{ record.type }}</td>
-              <td>{{ record.medium }}</td>
-              <td>{{ checkedBox(record.completed) }}</td>
-              <td>{{ textareaDisplayCharacterLimit(record.note) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <!-- end of Activity Records list section -->
+  <ActivityTable
+    v-bind:activityRecords="activityRecords"
+    v-bind:types="types"
+    v-bind:media="media"
+    v-on:delete-record-table="deleteRecord"
+    v-on:update-record-table="updateRecord"
+  />
 
   <!-- Summary section -->
   <div class="card">
@@ -84,11 +44,13 @@
 </template>
 
 <script>
+import ActivityTable from './components/ActivityTable.vue';
 import NewActivityForm from './components/NewActivityForm.vue';
 
 export default {
   components: {
     NewActivityForm,
+    ActivityTable,
   },
   data() {
     return {
@@ -194,20 +156,19 @@ export default {
         return r2.date.getTime() - r1.date.getTime();
       });
     },
-    checkedBox(completed) {
-      if (completed) {
-        return `Completed`;
-      }
-      return `Not completed`;
+    deleteRecord(record) {
+      // filter returns a new array of all records for which the function returns true
+      this.activityRecords = this.activityRecords.filter(function (rec) {
+        if (rec != record) {
+          return true;
+        }
+      });
     },
-    textareaDisplayCharacterLimit(text) {
-      if (text.length >= 40) {
-        return text.substr(0, 40) + '...';
-      }
-      return text;
-    },
-    formatDate(date) {
-      return Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(date);
+    updateRecord() {
+      // find the record in this.activityRecords, set completed value
+      let updatedRecord = this.activityRecords.find(function (rec) {
+        console.log('Edit record: ', rec);
+      });
     },
   },
 };
