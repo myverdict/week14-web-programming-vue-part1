@@ -1,53 +1,14 @@
 <template>
-  <NewActivityForm v-on:record-added="newRecordAdded" />
+  <h1 class="text-center">{{ activity }} Time Tracker</h1>
 
-  <!-- Activity Records list section -->
-  <div class="card">
-    <h2 class="card-header">Activity Records</h2>
-
-    <div class="card-body">
-      <h3>
-        <!-- Display number of records: with computed property -->
-        {{ totalRecords }}
-        <!-- {{ activityRecords.length }} records without computed property -->
-      </h3>
-
-      <div id="records">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>How many hours?</th>
-              <th>Type</th>
-              <th>Media</th>
-              <th>Completed</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-
-          <!-- use v-for to create one table row for each activity record -->
-          <tbody>
-            <tr
-              v-for="record in activityRecords"
-              v-bind:class="{
-                sketchingRow: record.type === 'Sketching',
-                drawingRow: record.type === 'Drawing',
-                paintingRow: record.type === 'Painting',
-              }"
-            >
-              <td>{{ formatDate(record.date) }}</td>
-              <td>{{ record.hours.toFixed(2) }}</td>
-              <td>{{ record.type }}</td>
-              <td>{{ record.medium }}</td>
-              <td>{{ checkedBox(record.completed) }}</td>
-              <td>{{ textareaDisplayCharacterLimit(record.note) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <!-- end of Activity Records list section -->
+  <!-- use v-bind with child props as attributes to send data from App.vue to child -->
+  <!-- use v-on to listen to events from child components -->
+  <NewActivityForm
+    v-on:record-added="newRecordAdded"
+    v-bind:activity="activity"
+    v-bind:types="types"
+    v-bind:media="media"
+  />
 
   <!-- Summary section -->
   <div class="card">
@@ -74,20 +35,82 @@
       </p>
     </div>
   </div>
+
+  <!-- Attributes -->
+  <footer>
+    <div>
+      Pencil Icons made by
+      <a
+        href="https://www.flaticon.com/authors/dinosoftlabs"
+        title="DinosoftLabs"
+        target="_blank"
+      >
+        DinosoftLabs
+      </a>
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon">
+        www.flaticon.com
+      </a>
+    </div>
+
+    <div>
+      Remove Icons made by
+      <a
+        href="https://www.flaticon.com/authors/pixel-perfect"
+        title="Pixel perfect"
+        target="_blank"
+      >
+        Pixel perfect
+      </a>
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    </div>
+
+    <div>
+      Green check mark icon from
+      <a
+        href="https://www.iconsdb.com/green-icons/check-mark-3-icon.html"
+        target="_blank"
+      >
+        Icons DB
+      </a>
+    </div>
+  </footer>
 </template>
 
 <script>
+import ActivityTable from './components/ActivityTable.vue';
 import NewActivityForm from './components/NewActivityForm.vue';
 
 export default {
   components: {
     NewActivityForm,
+    ActivityTable,
   },
   data() {
     return {
-      // array of activity records
+      // Name of the activity, e.g., sport, exercise, language, etc.
+      // used in App.vue and in the NewActivityForm.vue as props
+      activity: 'Practice Art',
+
+      // Array of activity records displayed in the activity table summary
+      // used in ActivityTable.vue and ActivitySummary.vue
       activityRecords: [],
+
+      // used to create choices (drop-down list): the option elements for select for question 3
+      // used in the NewActivityForm.vue, ActivityTable.vue, ActivitySummary.vue, and EditModal.vue as props
+      types: ['Sketching', 'Drawing', 'Painting'],
+
+      // used to set the values and the labels for the radio buttons for question 4
+      // used in NewActivityForm.vue, ActivityTable.vue, ActivitySummary.vue, and EditModal.vue as props
+      media: {
+        traditional: 'Traditional',
+        digital: 'Digital',
+      },
     };
+  },
+  mounted() {
+    this.updateAllRecords();
   },
   computed: {
     totalRecords() {
@@ -152,40 +175,48 @@ export default {
     },
   },
   methods: {
+    // this method adds an activity record to the database and updates the api
     newRecordAdded(record) {
-      // Push the record on to the activityRecords array
-      this.activityRecords.push(record);
+      // the $activity_record_api variable is taken from main.js &
+      // the addActivityRecord method is taken from the ActivityService.vue
+      this.$activity_record_api
+        .addActivityRecord(record)
+        .then((record) => {
+          this.updateAllRecords();
+        })
+        .catch((err) => {
+          let msg = err.response.data.join(', ');
+          alert('Error adding activity record.\n' + msg);
+        });
+    }, // END of newRecordAdded method
 
-      // set the mostRecentRecord to current record
-      // this.mostRecentRecord = record;
-
-      // sort the records according to date
-      this.activityRecords.sort(function (r1, r2) {
-        // returns negative value to order r1 before r2
-        // returns positive value to order r1 after r2
-        // displays earliest records at the beginning of the list
-        // return r1.date.getTime() - r2.date.getTime();
-        // displays recent records at the beginning of the list
-        return r2.date.getTime() - r1.date.getTime();
+    // this method deletes one record from the database & updates the api
+    deleteRecord(record) {
+      // the $activity_record_api variable is from main.js, &
+      // the deleteActivityRecord method is from the ActivityService.vue
+      this.$activity_record_api.deleteActivityRecord(record.id).then(() => {
+        this.updateAllRecords();
       });
     },
-    checkedBox(completed) {
-      if (completed) {
-        return `Completed`;
-      }
-      return `Not completed`;
+
+    // item coming from b-modal --> table --> App.vue to replace array with 1 updated table record row
+    updateOneItem(record) {
+      // the $activity_record_api variable is from main.js &
+      // the updateActivityRecord method is from the ActivityService.vue
+      this.$activity_record_api.updateActivityRecord(record).then(() => {
+        this.updateAllRecords();
+      });
     },
-    textareaDisplayCharacterLimit(text) {
-      if (text.length >= 40) {
-        return text.substr(0, 40) + '...';
-      }
-      return text;
-    },
-    formatDate(date) {
-      return Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(date);
+
+    // this method updates all activity records
+    updateAllRecords() {
+      // the $activity_record_api variable is from main.js &
+      // the getAllActivityRecords method is from the ActivityService.vue
+      this.$activity_record_api.getAllActivityRecords().then((records) => {
+        this.activityRecords = records;
+      });
     },
   },
-  components: { NewActivityForm },
 };
 </script>
 
@@ -202,5 +233,12 @@ export default {
 }
 .paintingRow {
   background-color: orange;
+}
+footer {
+  font-size: small;
+  background-color: lightgrey;
+  font-weight: bold;
+  margin-top: 25px;
+  padding: 10px;
 }
 </style>

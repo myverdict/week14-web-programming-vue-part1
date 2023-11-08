@@ -1,11 +1,7 @@
 <template>
-  <!-- display the name of the activity -->
-  <!-- Application header/title: activity variable is the activity data from the Vue script below -->
-  <h1 class="text-center">{{ activity }} Time Tracker</h1>
-
   <!-- Add records section form -->
   <div id="add-hours" class="card">
-    <h2 class="card-header">Add Records</h2>
+    <h2 class="card-header text-white bg-dark">Add Records</h2>
 
     <!-- START of the actual form section -->
     <div class="card-body">
@@ -16,13 +12,13 @@
         <li v-for="error in errors">{{ error }}</li>
       </div>
 
-      <!-- Date input -->
+      <!-- 1. Date input -->
       <div class="form-group">
         <!-- display name of activity in the label -->
         <label class="form-label" for="date">
           What date did you
           <!-- activity name, in lowercase -->
-          {{ activity.toLowerCase() }}?
+          {{ lowercase(activity) }}?
         </label>
 
         <!-- use v-model to connect this input to dateString data -->
@@ -40,7 +36,7 @@
 
       <br />
 
-      <!-- Hours input -->
+      <!-- 2. Hours input -->
       <div class="form-group">
         <label class="form-label" for="hours">
           How many hours did you practice for?
@@ -63,7 +59,7 @@
 
       <br />
 
-      <!-- Drop down list for the type of activity -->
+      <!-- 3. Drop down list for the type of activity -->
       <div class="form-group">
         <label class="form-label" for="activityType">What type?</label>
 
@@ -76,10 +72,11 @@
 
       <br />
 
+      <!-- 4. Medium of instruction (radio buttons) -->
       <!-- Label "What media" for radio buttons: Traditional or Digital -->
       <div class="form-label pb-2">What media?</div>
 
-      <!-- "Traditional" radio buttons -->
+      <!-- Option 1: "Traditional" radio buttons -->
       <div class="form-check-inline">
         <!-- v-model and v-bind media -->
         <input
@@ -96,7 +93,7 @@
         </label>
       </div>
 
-      <!-- "Digital" radio buttons -->
+      <!-- Option 2: "Digital" radio buttons -->
       <div class="form-check-inline">
         <!-- v-model and v-bind media -->
         <input
@@ -115,7 +112,7 @@
 
       <br /><br />
 
-      <!-- Add a "Completed?" checkbox -->
+      <!-- 5. Add a "Completed?" checkbox -->
       <div>Status</div>
       <div class="form-check pb-3 pt-3">
         <input
@@ -131,7 +128,7 @@
 
       <br />
 
-      <!-- Add a textarea for "Notes" -->
+      <!-- 6. Add a textarea for "Notes" -->
       <div class="form-group">
         <label for="textareaInput">Notes:</label>
         <textarea
@@ -144,7 +141,7 @@
 
       <br />
 
-      <!-- Add a "Add record" button -->
+      <!-- Submit Button for form: Add a "Add record" button -->
       <div>
         <!-- Add v-on:click -->
         <button class="btn btn-primary mt-2" type="button" v-on:click="submit">
@@ -157,11 +154,13 @@
 
 <script>
 export default {
+  props: {
+    activity: String,
+    types: Array,
+    media: Object,
+  },
   data() {
     return {
-      // Name of the activity, e.g., sport, exercise, language, etc.
-      activity: 'Practice Art',
-
       // these will be used with v-model to work with form data
       dateString: '', // date input from the client-side is always a string
       hours: 1,
@@ -169,15 +168,6 @@ export default {
       medium: '',
       completed: false,
       note: '',
-
-      // used to create choices (drop-down list): the option elements for select for question 3
-      types: ['Sketching', 'Drawing', 'Painting'],
-
-      // used to set the values and the labels for the radio buttons for question 4
-      media: {
-        traditional: 'Traditional',
-        digital: 'Digital',
-      },
 
       // store errors in an array discovered during validation
       errors: [],
@@ -250,4 +240,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+input:hover,
+select:hover,
+textarea:hover {
+  background-color: aliceblue;
+}
+</style>
