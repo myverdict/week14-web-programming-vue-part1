@@ -4,10 +4,9 @@
 
     <div class="card-body">
       <div>
-        <!-- add computed property to calculate the total hours -->
         <p>
           You have practiced a total of
-          <!-- display total hours -->
+          <!-- display total hours with computed property -->
           <span v-if="totalHours === 1">
             {{ totalHours.toFixed(2) }} hour.
           </span>
@@ -15,7 +14,7 @@
           <span v-else> {{ totalHours.toFixed(2) }} hours. </span>
         </p>
 
-        <!-- display a list of total hours for each activity type.  -->
+        <!-- display a list of total hours for each activity type. -->
         <p v-if="activityRecords.length != 0">
           Practice hours for each activity:
 
@@ -26,13 +25,21 @@
         </p>
       </div>
 
-      <div class="charts"></div>
+      <!-- Charts section -->
+      <div class="charts" v-if="activityRecords.length != 0">
+        <BarChart :chartData="chartDataForHours" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import BarChart from './charts/BarChart.vue';
+
 export default {
+  components: {
+    BarChart,
+  },
   props: {
     activityRecords: Array,
     types: Array,
@@ -98,6 +105,34 @@ export default {
 
       return arrayOfObjects;
     },
+    // Data for the bar chart
+    chartDataForHours() {
+      let colors = ['orchid', 'teal', 'yellowgreen'];
+      let activityArray = this.totalHoursForEachActivityRecord;
+
+      // create 2 empty arrays for the activity type and activity hours
+      let activityTypeNames = [];
+      let activityNumHours = [];
+
+      // add each activity type name and each activity total hours to its respective arrays
+      activityArray.forEach(function (eachActivity) {
+        activityTypeNames.push(eachActivity.typeOfActivity);
+        activityNumHours.push(eachActivity.numOfHours);
+      });
+
+      // return data in format expected by chartJS
+      return {
+        labels: activityTypeNames, // this is an array value
+        datasets: [
+          {
+            label: 'Hours practiced', // the label that will show in the tooltip on hover
+            // barThickness: 20,
+            data: activityNumHours, // array value
+            backgroundColor: colors, // array value
+          },
+        ],
+      };
+    },
   },
 };
 </script>
@@ -105,5 +140,11 @@ export default {
 <style scoped>
 .section-header {
   background-image: linear-gradient(45deg, violet, yellow);
+}
+.charts {
+  border: 2px solid violet;
+  padding: 0.5rem;
+  width: 50%;
+  margin: auto;
 }
 </style>
