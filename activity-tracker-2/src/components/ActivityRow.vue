@@ -67,7 +67,7 @@ export default {
         confirm(
           `Delete ${this.record.type} activity, with ${
             this.record.hours
-          } hours, dated ${this.record.date.toLocaleDateString()}?`
+          } hour(s), dated ${this.record.date.toLocaleDateString()}?`
         )
       ) {
         // emits a message to the parent ActivityTable.vue
