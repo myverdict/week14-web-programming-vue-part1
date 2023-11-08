@@ -1,156 +1,5 @@
 <template>
-  <h1 class="text-center">{{ activity }} Time Tracker</h1>
-
-  <!-- Add records section -->
-  <div id="add-hours" class="card">
-    <h2 class="card-header">Add Records</h2>
-
-    <div class="card-body">
-      <!-- Display errors section -->
-      <!-- use v-show to show this if there are validation errors -->
-      <div class="alert alert-danger" v-show="errors.length > 0">
-        <!-- show a list of validation errors from the form -->
-        <li v-for="error in errors">{{ error }}</li>
-      </div>
-
-      <!-- Date input -->
-      <div class="form-group">
-        <!-- display name of activity in the label -->
-        <label class="form-label" for="date">
-          What date did you
-          <!-- activity name, in lowercase -->
-          {{ activity.toLowerCase() }}?
-        </label>
-
-        <!-- use v-model to connect this input to dateString data -->
-        <input
-          id="date"
-          class="form-control"
-          type="date"
-          v-model="dateString"
-        />
-
-        <small id="date-help" class="form-text text-muted">
-          Date must be today or in the past.
-        </small>
-      </div>
-
-      <br />
-
-      <!-- Hours input -->
-      <div class="form-group">
-        <label class="form-label" for="hours">
-          How many hours did you practice for?
-        </label>
-
-        <!-- use v-model to connect this input to hours data -->
-        <input
-          id="hours"
-          class="form-control"
-          type="number"
-          min="0"
-          max="24"
-          v-model.number="hours"
-        />
-
-        <small id="hours-help" class="form-text text-muted">
-          Enter a number of hours, more than 0, up to a maximum of 24
-        </small>
-      </div>
-
-      <br />
-
-      <!-- Drop down list for the type of activity -->
-      <div class="form-group">
-        <label class="form-label" for="activityType">What type?</label>
-
-        <!-- Create select element, use v-model to connect to the types -->
-        <select class="form-control" id="activityType" v-model="type">
-          <!-- Use v-for to create option elements, one for each type -->
-          <option v-for="type in types">{{ type }}</option>
-        </select>
-      </div>
-
-      <br />
-
-      <!-- Label "What media" for radio buttons: Traditional or Digital -->
-      <div class="form-label pb-2">What media?</div>
-
-      <!-- "Traditional" radio buttons -->
-      <div class="form-check-inline">
-        <!-- v-model and v-bind media -->
-        <input
-          id="media1"
-          class="form-check-input"
-          type="radio"
-          v-bind:value="media.traditional"
-          v-model="medium"
-        />
-
-        <label class="form-check-label" for="media1">
-          <!--Display text -->
-          {{ media.traditional }}
-        </label>
-      </div>
-
-      <!-- "Digital" radio buttons -->
-      <div class="form-check-inline">
-        <!-- v-model and v-bind media -->
-        <input
-          id="media2"
-          class="form-check-input"
-          type="radio"
-          v-bind:value="media.digital"
-          v-model="medium"
-        />
-
-        <label class="form-check-label" for="media2">
-          <!-- Display text -->
-          {{ media.digital }}
-        </label>
-      </div>
-
-      <br /><br />
-
-      <!-- Add a "Completed?" checkbox -->
-      <div>Status</div>
-      <div class="form-check pb-3 pt-3">
-        <input
-          class="form-check-input"
-          id="completed-practice"
-          type="checkbox"
-          v-model="completed"
-        />
-        <label class="form-check-label" for="completed-practice">
-          Completed?
-        </label>
-      </div>
-
-      <br />
-
-      <!-- Add a textarea for "Notes" -->
-      <div class="form-group">
-        <label for="textareaInput">Notes:</label>
-        <textarea
-          id="textareaInput"
-          class="form-control"
-          rows="3"
-          v-model="note"
-        ></textarea>
-      </div>
-
-      <br />
-
-      <!-- Add a "Add record" button -->
-      <div>
-        <!-- Add v-on:click -->
-        <button class="btn btn-primary mt-2" type="button" v-on:click="submit">
-          Add record
-        </button>
-      </div>
-    </div>
-  </div>
-  <!-- end of add records section -->
+  <NewActivityForm v-on:record-added="newRecordAdded" />
 
   <!-- Activity Records list section -->
   <div class="card">
@@ -228,34 +77,16 @@
 </template>
 
 <script>
+import NewActivityForm from './components/NewActivityForm.vue';
+
 export default {
+  components: {
+    NewActivityForm,
+  },
   data() {
     return {
-      // name of the activity
-      activity: 'Practice Art',
-
-      // this will be used with v-model to work with form data
-      dateString: '',
-      hours: 1,
-      type: 'Sketching',
-      medium: '',
-      completed: false,
-      note: '',
-
       // array of activity records
       activityRecords: [],
-
-      // used to create choices - the option elements for select element
-      types: ['Sketching', 'Drawing', 'Painting'],
-
-      // used to set the values, and the labels for the radio buttons
-      media: {
-        traditional: 'Traditional',
-        digital: 'Digital',
-      },
-
-      // store errors discovered during validation
-      errors: [],
     };
   },
   computed: {
@@ -276,7 +107,6 @@ export default {
     totalHoursForEachActivityRecord() {
       let arrayOfObjects = []; // empty array for objects
       let objectInArray = {};
-
       this.activityRecords.forEach((record) => {
         this.types.forEach((activityType) => {
           // if the record entered is equal to one of the activity types
@@ -288,7 +118,6 @@ export default {
                 typeOfActivity: record.type,
                 numOfHours: record.hours,
               };
-
               // push the object on to the arrayOfObjects
               arrayOfObjects.push(objectInArray);
             }
@@ -296,7 +125,6 @@ export default {
             // i.e., arrayOfObjects.length != 0
             else {
               let found = false; // initial boolean to record not found
-
               // loop through the array to find if the item/object already exists
               for (let i = 0; i < arrayOfObjects.length; i++) {
                 // if the record exists in the arrayOfObjects
@@ -306,7 +134,6 @@ export default {
                   found = true; // record is found
                 }
               }
-
               // if the record is not found in the arrayOfObjects
               if (!found) {
                 // create a new object
@@ -314,7 +141,6 @@ export default {
                   typeOfActivity: record.type,
                   numOfHours: record.hours,
                 };
-
                 // push the object on to the arrayOfObjects
                 arrayOfObjects.push(objectInArray);
               }
@@ -322,77 +148,26 @@ export default {
           }
         }); // end of types array forEach
       }); // end of activityRecords array forEach
-
       return arrayOfObjects;
     },
   },
   methods: {
-    submit() {
-      // convert the dateString to a Date object
-      let date = new Date(this.dateString);
+    newRecordAdded(record) {
+      // Push the record on to the activityRecords array
+      this.activityRecords.push(record);
 
-      // Clear the errors array
-      this.errors = [];
+      // set the mostRecentRecord to current record
+      // this.mostRecentRecord = record;
 
-      // Validation: dates need to be valid, and in the past or today
-      if (
-        !this.dateString ||
-        this.dateString == 'Invalid Date' ||
-        date > new Date()
-      ) {
-        this.errors.push('Select a valid date, today or in the past.');
-      }
-
-      // Validation: Hours should be between 0 and 24
-      if (this.hours <= 0 || this.hours > 24) {
-        this.errors.push(
-          'The number of hours must be greater than 0 and less than 24.'
-        );
-      }
-
-      // Validation: Activity type has to be selected from drop down list
-      if (!this.type) {
-        this.errors.push('Select a type.');
-      }
-
-      // Validation: Activity medium must be selected (for radio buttons)
-      if (!this.medium) {
-        this.errors.push('Select a media.');
-      }
-
-      // if there are no errors, add a record to the summary
-      if (this.errors.length == 0) {
-        // create a record
-        let record = {
-          date: date,
-          hours: this.hours,
-          type: this.type,
-          medium: this.medium,
-          completed: this.completed,
-          note: this.note,
-        };
-
-        // Push the record on to the activityRecords array
-        this.activityRecords.push(record);
-
-        // sort the records according to date
-        this.activityRecords.sort(function (r1, r2) {
-          // returns negative value to order r1 before r2
-          // returns positive value to order r1 after r2
-          // if you want the earliest date at the top of the list
-          return r1.date.getTime() - r2.date.getTime(); // this returns a timestamp
-
-          // if you want the most recent date on top of the list
-          // return r2.date.getTime() - r1.date.getTime() // this returns a timestamp
-        });
-
-        // reset some input fields after a successful submit request
-        this.dateString = '';
-        this.hours = 1;
-        this.medium = '';
-        this.completed = false;
-        this.note = '';
-      }
+      // sort the records according to date
+      this.activityRecords.sort(function (r1, r2) {
+        // returns negative value to order r1 before r2
+        // returns positive value to order r1 after r2
+        // displays earliest records at the beginning of the list
+        // return r1.date.getTime() - r2.date.getTime();
+        // displays recent records at the beginning of the list
+        return r2.date.getTime() - r1.date.getTime();
+      });
     },
     checkedBox(completed) {
       if (completed) {
@@ -410,6 +185,7 @@ export default {
       return Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(date);
     },
   },
+  components: { NewActivityForm },
 };
 </script>
 
