@@ -4,7 +4,7 @@ Activity tracker app with Vue3
 
 <h1>WEB PROGRAMMING</h1>
 
-<h2>Week 14: Final project - Activity tracker app with Vue 3</h2>
+<h2>Week 14:, Part 1: Final project - Activity tracker app with Vue 3</h2>
 
 <ul>
   <li>
