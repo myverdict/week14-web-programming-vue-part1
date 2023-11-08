@@ -33,6 +33,7 @@
         <DoughnutChart :chartData="chartDataForMedia" />
         <br />
         <hr />
+        <PieChart :chartData="charDataForStatus" />
       </div>
     </div>
   </div>
@@ -41,11 +42,13 @@
 <script>
 import BarChart from './charts/BarChart.vue';
 import DoughnutChart from './charts/DoughnutChart.vue';
+import PieChart from './charts/PieChart.vue';
 
 export default {
   components: {
     BarChart,
     DoughnutChart,
+    PieChart,
   },
   props: {
     activityRecords: Array,
@@ -111,7 +114,7 @@ export default {
       }); // end of activityRecords array forEach
 
       return arrayOfObjects;
-    },
+    }, // END OF totalHoursForEachActivityRecord COMPUTED PROPERTY
     // Data for the bar chart - each activity and total hours for each activity
     chartDataForHours() {
       let colors = ['orchid', 'teal', 'yellowgreen'];
@@ -173,7 +176,40 @@ export default {
         ],
       };
     }, // END OF DOUGHNUT CHART COMPUTED PROPERTY
-  },
+    // Data for the PIE chart - completed/pending
+    charDataForStatus() {
+      let colors = ['#DAF7A6', '#FFC300'];
+
+      // [ completedCount, pendingCount ]
+      let statusCount = [];
+      let completedCount = 0;
+      let pendingCount = 0;
+
+      // add the number of activities completed/pending
+      this.activityRecords.forEach(function (eachActivity) {
+        if (eachActivity.completed) {
+          completedCount += 1;
+        } else {
+          pendingCount += 1;
+        }
+      });
+
+      // push the completed and pending count on to the status array
+      statusCount.push(completedCount);
+      statusCount.push(pendingCount);
+
+      // return data in format expected by chartJS
+      return {
+        labels: ['Completed', 'Pending'], // an array value
+        datasets: [
+          {
+            data: statusCount, // an array value
+            backgroundColor: colors, // an array value
+          },
+        ],
+      };
+    }, // END OF PIE CHART COMPUTED PROPERTY
+  }, // END OF COMPUTED PROPERTY
 };
 </script>
 

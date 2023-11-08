@@ -4,7 +4,7 @@
   this chart displays each activity and the total hours for each activity
 -->
 <template>
-  <Bar id="activity-n-hours-chart" :data="chartData" :options="chartOptions" />
+  <Bar :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
