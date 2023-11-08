@@ -28,6 +28,11 @@
       <!-- Charts section -->
       <div class="charts" v-if="activityRecords.length != 0">
         <BarChart :chartData="chartDataForHours" />
+        <br />
+        <hr />
+        <DoughnutChart :chartData="chartDataForMedia" />
+        <br />
+        <hr />
       </div>
     </div>
   </div>
@@ -35,10 +40,12 @@
 
 <script>
 import BarChart from './charts/BarChart.vue';
+import DoughnutChart from './charts/DoughnutChart.vue';
 
 export default {
   components: {
     BarChart,
+    DoughnutChart,
   },
   props: {
     activityRecords: Array,
@@ -105,7 +112,7 @@ export default {
 
       return arrayOfObjects;
     },
-    // Data for the bar chart
+    // Data for the bar chart - each activity and total hours for each activity
     chartDataForHours() {
       let colors = ['orchid', 'teal', 'yellowgreen'];
       let activityArray = this.totalHoursForEachActivityRecord;
@@ -132,7 +139,40 @@ export default {
           },
         ],
       };
-    },
+    }, // END OF BAR CHART COMPUTED PROPERTY
+    // Data for the doughnut chart - medium of instruction
+    chartDataForMedia() {
+      let colors = ['#DAF7A6', '#FFC300'];
+
+      // [ traditionalCount, digitalCount ]
+      let activityMediaCount = [];
+      let traditionalCount = 0;
+      let digitalCount = 0;
+
+      // add number of times media type appears to each medium
+      this.activityRecords.forEach((eachActivity) => {
+        if (eachActivity.medium === this.media.traditional) {
+          traditionalCount += 1;
+        } else {
+          digitalCount += 1;
+        }
+      });
+
+      // Push the counts onto the activityMediaCount array
+      activityMediaCount.push(traditionalCount);
+      activityMediaCount.push(digitalCount);
+
+      // return data in format expected by chartJS
+      return {
+        labels: [this.media.traditional, this.media.digital], // an array value
+        datasets: [
+          {
+            data: activityMediaCount, // an array value
+            backgroundColor: colors, // an array value
+          },
+        ],
+      };
+    }, // END OF DOUGHNUT CHART COMPUTED PROPERTY
   },
 };
 </script>

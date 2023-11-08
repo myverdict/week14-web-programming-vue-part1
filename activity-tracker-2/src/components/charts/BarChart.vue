@@ -1,4 +1,8 @@
-<!-- this is a child component of the ActivitySummary.vue component -->
+<!--
+  this is a child component of the ActivitySummary.vue component
+
+  this chart displays each activity and the total hours for each activity
+-->
 <template>
   <Bar id="activity-n-hours-chart" :data="chartData" :options="chartOptions" />
 </template>
