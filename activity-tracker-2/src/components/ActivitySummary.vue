@@ -3,28 +3,30 @@
     <h2 class="card-header section-header">Summary</h2>
 
     <div class="card-body">
-      <!-- add computed property to calculate the total hours -->
-      <p>
-        You have practiced a total of
-        <!-- display total hours -->
-        <span v-if="totalHours === 1"> {{ totalHours.toFixed(2) }} hour. </span>
+      <div>
+        <!-- add computed property to calculate the total hours -->
+        <p>
+          You have practiced a total of
+          <!-- display total hours -->
+          <span v-if="totalHours === 1">
+            {{ totalHours.toFixed(2) }} hour.
+          </span>
 
-        <span v-else> {{ totalHours.toFixed(2) }} hours. </span>
-      </p>
+          <span v-else> {{ totalHours.toFixed(2) }} hours. </span>
+        </p>
 
-      <!-- Challenge question! Display a list of the total hours for each type.  -->
-      <p v-if="activityRecords.length != 0">
-        Practice hours for each activity:
+        <!-- display a list of total hours for each activity type.  -->
+        <p v-if="activityRecords.length != 0">
+          Practice hours for each activity:
 
-        <li v-for="eachActivityHours in totalHoursForEachActivityRecord">
-          {{ eachActivityHours.typeOfActivity }}:
-          {{ eachActivityHours.numOfHours.toFixed(2) }}
+          <li v-for="eachActivityHours in totalHoursForEachActivityRecord">
+            {{ eachActivityHours.typeOfActivity }}:
+            {{ eachActivityHours.numOfHours.toFixed(2) }}
+          </li>
+        </p>
+      </div>
 
-          <!--
-            <span v-if="eachActivityHours.hours > 0">{{ eachActivityHours }}</span>
-          -->
-        </li>
-      </p>
+      <div class="charts"></div>
     </div>
   </div>
 </template>
