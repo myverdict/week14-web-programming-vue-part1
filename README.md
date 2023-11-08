@@ -14,7 +14,7 @@ Activity tracker app with Vue3
         Part 1: No components - Contd. from <a href="https://github.com/myverdict/week10-web-programming-vue">Week 10</a>
       </li>
       <li>
-        Part 2: App with components
+        Part 2: App with components and Chart.js implemented
       </li>
     </ul>
 
