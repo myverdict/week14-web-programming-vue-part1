@@ -1,7 +1,7 @@
 <template>
   <!-- List of Activity Records TABLE section -->
   <div class="card">
-    <h2 class="card-header text-white bg-dark">Activity Records</h2>
+    <h2 class="card-header section-header">Activity Records</h2>
 
     <!-- checkbox for 'Edit table' option -->
     <div class="edit-table-toggle form-check editing-checkbox">
@@ -94,6 +94,9 @@ export default {
 </script>
 
 <style scoped>
+.section-header {
+  background-image: linear-gradient(45deg, violet, yellow);
+}
 #records {
   max-height: 250px;
   overflow: scroll;

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2 class="card-header text-white bg-dark">Summary</h2>
+    <h2 class="card-header section-header">Summary</h2>
 
     <div class="card-body">
       <!-- add computed property to calculate the total hours -->
@@ -99,3 +99,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section-header {
+  background-image: linear-gradient(45deg, violet, yellow);
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <!-- Add records section -->
   <div id="add-hours" class="card">
-    <h2 class="card-header text-white bg-dark">Add Records</h2>
+    <h2 class="card-header section-header">Add Records</h2>
 
     <!-- START of the actual form section -->
     <div class="card-body">
@@ -143,7 +143,7 @@
 
       <!-- Submit Button for form: Add a "Add record" button -->
       <div>
-        <button class="btn btn-primary mt-2" type="button" v-on:click="submit">
+        <button class="btn btn-dark mt-2" type="button" v-on:click="submit">
           Add record
         </button>
       </div>
@@ -236,3 +236,9 @@ export default {
   }, // END of methods
 };
 </script>
+
+<style scoped>
+.section-header {
+  background-image: linear-gradient(45deg, violet, yellow);
+}
+</style>

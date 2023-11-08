@@ -1,65 +1,79 @@
 <template>
-  <h1 class="text-center">{{ activity }} Time Tracker</h1>
+  <div class="tracker-view">
+    <h1 class="text-center page-title">{{ activity }} Time Tracker</h1>
 
-  <NewActivityForm
-    v-on:record-added="newRecordAdded"
-    v-bind:activity="activity"
-    v-bind:types="types"
-    v-bind:media="media"
-  />
+    <br />
 
-  <ActivityTable
-    v-bind:activityRecords="activityRecords"
-    v-bind:types="types"
-    v-bind:media="media"
-    v-on:delete-record-table="deleteRecord"
-    v-on:update-record-table="updateRecord"
-  />
+    <NewActivityForm
+      v-on:record-added="newRecordAdded"
+      v-bind:activity="activity"
+      v-bind:types="types"
+      v-bind:media="media"
+    />
 
-  <ActivitySummary
-    v-bind:activityRecords="activityRecords"
-    v-bind:types="types"
-    v-bind:media="media"
-  />
+    <br />
 
-  <!-- Attributes -->
-  <footer>
-    <div>
-      Pencil Icons made by
-      <a
-        href="https://www.flaticon.com/authors/dinosoftlabs"
-        title="DinosoftLabs"
-        target="_blank"
-      >
-        DinosoftLabs
-      </a>
-      from
-      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-    </div>
+    <ActivityTable
+      v-bind:activityRecords="activityRecords"
+      v-bind:types="types"
+      v-bind:media="media"
+      v-on:delete-record-table="deleteRecord"
+      v-on:update-record-table="updateRecord"
+    />
 
-    <div>
-      Remove Icons made by
-      <a
-        href="https://www.flaticon.com/authors/pixel-perfect"
-        title="Pixel perfect"
-        target="_blank"
-      >
-        Pixel perfect
-      </a>
-      from
-      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-    </div>
+    <br />
 
-    <div>
-      Green check mark icon from
-      <a
-        href="https://www.iconsdb.com/green-icons/check-mark-3-icon.html"
-        target="_blank"
-      >
-        Icons DB
-      </a>
-    </div>
-  </footer>
+    <ActivitySummary
+      v-bind:activityRecords="activityRecords"
+      v-bind:types="types"
+      v-bind:media="media"
+    />
+
+    <br />
+
+    <!-- Attributes -->
+    <footer>
+      <div>
+        Pencil Icons made by
+        <a
+          href="https://www.flaticon.com/authors/dinosoftlabs"
+          title="DinosoftLabs"
+          target="_blank"
+        >
+          DinosoftLabs
+        </a>
+        from
+        <a href="https://www.flaticon.com/" title="Flaticon">
+          www.flaticon.com</a
+        >
+      </div>
+
+      <div>
+        Remove Icons made by
+        <a
+          href="https://www.flaticon.com/authors/pixel-perfect"
+          title="Pixel perfect"
+          target="_blank"
+        >
+          Pixel perfect
+        </a>
+        from
+        <a href="https://www.flaticon.com/" title="Flaticon">
+          www.flaticon.com</a
+        >
+      </div>
+
+      <div>
+        Green check mark icon from
+        <a
+          href="https://www.iconsdb.com/green-icons/check-mark-3-icon.html"
+          target="_blank"
+        >
+          Icons DB
+        </a>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -128,6 +142,17 @@ export default {
 </script>
 
 <style>
+.page-title {
+  background-image: linear-gradient(45deg, violet, yellow);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+.tracker-view {
+  margin: 1.5rem;
+}
 footer {
   font-size: small;
   background-color: lightgrey;
