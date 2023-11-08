@@ -21,6 +21,45 @@
     v-bind:types="types"
     v-bind:media="media"
   />
+
+  <!-- Attributes -->
+  <footer>
+    <div>
+      Pencil Icons made by
+      <a
+        href="https://www.flaticon.com/authors/dinosoftlabs"
+        title="DinosoftLabs"
+        target="_blank"
+      >
+        DinosoftLabs
+      </a>
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    </div>
+
+    <div>
+      Remove Icons made by
+      <a
+        href="https://www.flaticon.com/authors/pixel-perfect"
+        title="Pixel perfect"
+        target="_blank"
+      >
+        Pixel perfect
+      </a>
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    </div>
+
+    <div>
+      Green check mark icon from
+      <a
+        href="https://www.iconsdb.com/green-icons/check-mark-3-icon.html"
+        target="_blank"
+      >
+        Icons DB
+      </a>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -88,18 +127,12 @@ export default {
 };
 </script>
 
-<style scoped>
-#records {
-  max-height: 250px;
-  overflow: scroll;
-}
-.sketchingRow {
-  background-color: yellow;
-}
-.drawingRow {
-  background-color: greenyellow;
-}
-.paintingRow {
-  background-color: orange;
+<style>
+footer {
+  font-size: small;
+  background-color: lightgrey;
+  font-weight: bold;
+  margin-top: 25px;
+  padding: 10px;
 }
 </style>

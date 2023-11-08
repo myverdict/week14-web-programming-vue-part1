@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2 class="card-header">Summary</h2>
+    <h2 class="card-header text-white bg-dark">Summary</h2>
 
     <div class="card-body">
       <!-- add computed property to calculate the total hours -->
